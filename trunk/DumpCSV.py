@@ -12,7 +12,7 @@ import sys
 import Options
 
 # parse command line
-parser = cx_OptionParser.OptionParser()
+parser = cx_OptionParser.OptionParser("DumpCSV")
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption("--record-sep", default = "\n", metavar = "CHAR",
         help = "record separator to use")
@@ -27,6 +27,8 @@ parser.AddOption("--report-point", type = "int", metavar = "N",
 parser.AddOption("--sql-in-file", action = "store_true",
         help = "SQL parameter is actually a file name in which the SQL is "
                "found")
+parser.AddOption("--quoting", default="MINIMAL",
+        help = "quoting flag (ALL | MINIMAL | NONNUMERIC | NONE)")
 cx_LoggingOptions.AddOptions(parser)
 parser.AddArgument("sql", required = True,
         help = "the SQL to execute or the name of a file in which the SQL "
@@ -57,13 +59,24 @@ cursor.execute(sql)
 def EvalString(value):
     return value.replace("\\t", "\t").replace("\\n", "\n")
 
+if options.quoting == "ALL":
+  quoting = csv.QUOTE_ALL
+elif options.quoting == "MINIMAL":
+  quoting = csv.QUOTE_MINIMAL
+elif options.quoting == "NONNUMERIC":
+  quoting = csv.QUOTE_NONNUMERIC
+elif options.quoting == "NONE":
+  quoting = csv.QUOTE_NONE
+else:
+  quoting = csv.QUOTE_MINIMAL
+
 # dump the results to the output file
 fieldSeparator = EvalString(options.fieldSep)
 recordSeparator = EvalString(options.recordSep)
 stringEncloser = EvalString(options.stringEncloser)
 escapeCharacter = EvalString(options.escapeChar)
 writer = csv.writer(outFile, delimiter = fieldSeparator,
-        quotechar = stringEncloser, escapechar = escapeCharacter,
+        quotechar = stringEncloser, escapechar = escapeCharacter, quoting = quoting,
         lineterminator = recordSeparator)
 for row in cursor:
     writer.writerow(row)

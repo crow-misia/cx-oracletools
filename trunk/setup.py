@@ -27,10 +27,10 @@ class build_exe(cx_Freeze.build_exe):
 
     def finalize_options(self):
         cx_Freeze.build_exe.finalize_options(self)
-        self.set_source_location("cx_Logging", "trunk")
-        self.set_source_location("cx_Oracle", "trunk")
-        self.set_source_location("cx_PyGenLib", "trunk")
-        self.set_source_location("cx_PyOracleLib", "trunk")
+        self.set_source_location("cx_Logging", "tags", "2.0")
+        self.set_source_location("cx_Oracle", "tags", "5.0.4")
+        self.set_source_location("cx_PyGenLib", "tags", "3.0")
+        self.set_source_location("cx_PyOracleLib", "tags", "2.5")
         dirName = "exe.%s-%s-%s" % \
                 (distutils.util.get_platform(), sys.version[0:3],
                  oracleVersion)
@@ -164,7 +164,6 @@ if sys.platform == "win32":
     upgradeData = [(oldUpgradeCode, None, sversion, None, 513, None,
                     "REMOVEOLDOLDVERSION")]
     options["bdist_msi"] = dict(
-            add_to_path = True,
             data = dict(Upgrade = upgradeData),
             target_name = "%s-%s-%s" % (NAME, VERSION, oracleVersion),
             upgrade_code = upgradeCode)

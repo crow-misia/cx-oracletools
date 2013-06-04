@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: cx_OracleTools
+Version: 8.0
+Summary: Tools for managing Oracle data and source code.
+Home-page: http://cx-oracletools.sourceforge.net
+Author: Anthony Tuininga
+Author-email: anthony.tuininga@gmail.com
+License: See LICENSE.txt
+Description: Tools for managing Oracle data and source code.
+Platform: UNKNOWN
